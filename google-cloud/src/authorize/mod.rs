@@ -141,12 +141,8 @@ impl TokenManager {
         let current_time = chrono::Utc::now();
         match self.current_token {
             Some(ref token) if token.expiry >= current_time => Ok(token.value.to_string()),
-            Some(ref token) if token.expiry >= current_time && self.use_metadata_server => {
-                //
-                // TODO
-                // logic is a little convoluted but makes a clean diff
-                // need to test
-                //
+            Some(ref token) if token.expiry < current_time && self.use_metadata_server => {
+                // TODO untested
                 let token_metadata = get_metadata().await.unwrap();
                 let lifetime = chrono::Duration::seconds(token_metadata.expires_in - 1);
                 let token_value = TokenValue::Bearer(token_metadata.access_token);
