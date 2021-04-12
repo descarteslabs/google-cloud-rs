@@ -126,7 +126,7 @@ impl TokenManager {
 
         TokenManager {
             creds: fake_creds,
-            client: Client::builder().build::<_, hyper::Body>(HttpsConnector::new()),
+            client: Client::builder().build::<_, hyper::Body>(HttpsConnector::with_native_roots()),
             scopes: "".to_string(),
             use_metadata_server: true,
             current_token: Some(Token {
